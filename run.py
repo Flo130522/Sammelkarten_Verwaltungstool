@@ -1,9 +1,11 @@
 import csv
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext
 
 sammelkarten_liste = []
 
-def karte_eingeben():
-    nummern = input("Gib die Nummern der Sammelkarten (durch Leerzeichen getrennt) ein: ")
+def karte_eingeben(entry, text_widget):
+    nummern = entry.get()
     nummern = list(map(int, nummern.split()))
 
     for nummer in nummern:
@@ -17,8 +19,11 @@ def karte_eingeben():
         if not found:
             sammelkarten_liste.append({'Nummer': nummer, 'Anzahl': 1})
 
-def karte_versenden():
-    nummern = input("Gib die Nummern der Sammelkarten zum Versenden (durch Leerzeichen getrennt) ein: ")
+    entry.delete(0, tk.END)  
+    liste_anzeigen(text_widget)
+
+def karte_versenden(entry, text_widget):
+    nummern = entry.get()
     nummern = list(map(int, nummern.split()))
 
     for nummer in nummern:
@@ -33,13 +38,35 @@ def karte_versenden():
                 break
 
         if not found:
-            print(f"Fehler: Die Sammelkarte mit der Nummer {nummer} wurde nicht gefunden und kann nicht versendet werden.")
+            messagebox.showerror("Fehler", f"Die Sammelkarte mit der Nummer {nummer} wurde nicht gefunden und kann nicht versendet werden.")
 
-def liste_anzeigen():
-    print("Liste der Sammelkarten:")
-    for karte in sammelkarten_liste:
-        print(f"Nummer: {karte['Nummer']}, Anzahl: {karte['Anzahl']}")
+    entry.delete(0, tk.END)  
 
+def liste_anzeigen(text_widget, separate_window=False):
+    if separate_window:
+        list_window = tk.Tk()
+        list_window.title("Liste aller Sammelkarten")
+
+        text_widget_separate = scrolledtext.ScrolledText(list_window, width=40, height=20)
+        text_widget_separate.pack(padx=10, pady=10)
+
+        text_widget_separate.insert(tk.END, "Liste aller Sammelkarten:\n")
+        for karte in sammelkarten_liste:
+            text_widget_separate.insert(tk.END, f"Nummer: {karte['Nummer']}, Anzahl: {karte['Anzahl']}\n")
+
+        text_widget_separate.configure(state='disabled')  
+
+        list_window.mainloop()
+    else:
+        text_widget.config(state='normal')  
+        text_widget.delete('1.0', tk.END)  
+
+        text_widget.insert(tk.END, "Liste der zuletzt hinzugefügten Sammelkarten:\n")
+        for karte in sammelkarten_liste[-5:]:  
+            text_widget.insert(tk.END, f"Nummer: {karte['Nummer']}, Anzahl: {karte['Anzahl']}\n")
+
+        text_widget.config(state='disabled')  
+        
 def exportiere_csv():
     with open('sammelkarten_liste.csv', 'w', newline='') as csvfile:
         fieldnames = ['Nummer', 'Anzahl']
@@ -49,19 +76,57 @@ def exportiere_csv():
         for karte in sammelkarten_liste:
             writer.writerow(karte)
 
-while True:
-    print("\n1. Karte eingeben\n2. Karte versenden\n3. Liste anzeigen\n4. CSV exportieren\n5. Beenden")
-    auswahl = int(input("Wähle eine Option (1-5): "))
+def importiere_csv(dateipfad):
+    if sammelkarten_liste:
+        antwort = messagebox.askyesno("Daten überschreiben", "Möchten Sie die vorhandenen Daten überschreiben?")
+        if not antwort:
+            return 
 
-    if auswahl == 1:
-        karte_eingeben()
-    elif auswahl == 2:
-        karte_versenden()
-    elif auswahl == 3:
-        liste_anzeigen()
-    elif auswahl == 4:
-        exportiere_csv()
-    elif auswahl == 5:
-        break
-    else:
-        print("Ungültige Auswahl. Bitte wähle eine Option von 1 bis 5.")
+    sammelkarten_liste.clear()
+    
+    with open(dateipfad, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            sammelkarten_liste.append({'Nummer': int(row['Nummer']), 'Anzahl': int(row['Anzahl'])})
+
+def importiere_csv_durch_dialog():
+    root = tk.Tk()
+    root.withdraw()  
+    file_path = filedialog.askopenfilename(title="CSV-Datei auswählen", filetypes=[("CSV-Dateien", "*.csv")])
+    if file_path:
+        importiere_csv(file_path)
+
+def zeige_gui():
+    root = tk.Tk()
+    root.title("Sammelkarten Verwaltung")
+
+    entry_label = tk.Label(root, text="Nummern eingeben:")
+    entry_label.pack(pady=10)
+
+    entry = tk.Entry(root, width=30)
+    entry.pack(pady=10)
+
+    eingeben_button = tk.Button(root, text="Karte eingeben", command=lambda: karte_eingeben(entry, text_widget))
+    eingeben_button.pack(pady=5)
+
+    versenden_button = tk.Button(root, text="Karte versenden", command=lambda: karte_versenden(entry, text_widget))
+    versenden_button.pack(pady=5)
+
+    anzeigen_button = tk.Button(root, text="Liste anzeigen", command=lambda: liste_anzeigen(text_widget, separate_window=True))
+    anzeigen_button.pack(pady=10)
+
+    export_button = tk.Button(root, text="CSV exportieren", command=exportiere_csv)
+    export_button.pack(pady=10)
+
+    import_button = tk.Button(root, text="CSV importieren", command=importiere_csv_durch_dialog)
+    import_button.pack(pady=10)
+
+    text_widget = scrolledtext.ScrolledText(root, height=10, width=40)
+    text_widget.pack(pady=10)
+    text_widget.config(state='disabled') 
+    exit_button = tk.Button(root, text="Beenden", command=root.destroy)
+    exit_button.pack(pady=10)
+
+    root.mainloop()
+
+zeige_gui()
