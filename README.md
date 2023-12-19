@@ -23,31 +23,6 @@
 [linkedin-url]: https://linkedin.com/in/flokurek
 Das Sammelkarten Verwaltungs-Tool ist eine Anwendung, die es ermöglicht, eine Liste von Sammelkarten zu erstellen, zu verwalten, zu versenden und in einer CSV-Datei zu speichern. Die Anwendung wurde in Python unter Verwendung von Tkinter für die Benutzeroberfläche entwickelt.
 
-# Sammelkarten-Verwaltungstool
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/flo130522/Sammelkarten_Verwaltungstool.svg?style=for-the-badge
-[contributors-url]: https://github.com/flo130522/Sammelkarten_Verwaltungstool/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/flo130522/Sammelkarten_Verwaltungstool.svg?style=for-the-badge
-[forks-url]: https://github.com/flo130522/Sammelkarten_Verwaltungstool/network/members
-[stars-shield]: https://img.shields.io/github/stars/flo130522/Sammelkarten_Verwaltungstool.svg?style=for-the-badge
-[stars-url]: https://github.com/flo130522/Sammelkarten_Verwaltungstool/stargazers
-[issues-shield]: https://img.shields.io/github/issues/flo130522/Sammelkarten_Verwaltungstool.svg?style=for-the-badge
-[issues-url]: https://github.com/flo130522/Sammelkarten_Verwaltungstool/issues
-[license-shield]: https://img.shields.io/github/license/flo130522/Sammelkarten_Verwaltungstool.svg?style=for-the-badge
-[license-url]: https://github.com/flo130522/Sammelkarten_Verwaltungstool/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/flokurek
-Das Sammelkarten Verwaltungs-Tool ist eine Anwendung, die es ermöglicht, eine Liste von Sammelkarten zu erstellen, zu verwalten, zu versenden und in einer CSV-Datei zu speichern. Die Anwendung wurde in Python unter Verwendung von Tkinter für die Benutzeroberfläche entwickelt.
-
 ## Funktionen
 ### Karte eingeben
 Fügt eine oder mehrere Sammelkarten mit ihren Nummern hinzu.
